@@ -91,7 +91,9 @@
 			option.swipeList.style.left = move2Left+'px';
 
 			// 自动切换按钮
-			autoChange(option);
+			if(option.hasBtn){
+				autoChange(option);
+			}
 
 			if(move2Left <= -(option.widthAll-option.width)){
 				setTimeout(function(){
@@ -125,7 +127,9 @@
 			option.swipeList.style.left = move2Right+'px';
 
 			// 自动切换按钮
-			autoChange(option);
+			if(option.hasBtn){
+				autoChange(option);
+			}
 
 			if(move2Right >= 0){
 				setTimeout(function(){
@@ -160,7 +164,9 @@
 			option.swipeList.style.top = move2top+'px';
 
 			// 自动切换按钮
-			autoChange(option);
+			if(option.hasBtn){
+				autoChange(option);
+			}
 			
 
 			if(move2top <= -(option.heightAll-option.height)){
@@ -195,7 +201,9 @@
 			option.swipeList.style.top = move2bottom+'px';
 
 			// 自动切换按钮
-			autoChange(option);
+			if(option.hasBtn){
+				autoChange(option);
+			}
 			
 
 			if(move2bottom >= 0){
@@ -214,10 +222,10 @@
 	autoChange = function(option){
 		var btn;
 		var queryStr = '.'+option.btnClass+'.'+option.activeClass;
-		var nextObj = option.swipeList.parentNode.querySelector(queryStr).nextSibling;
-		if(nextObj){
+		var activeObj = option.swipeList.parentNode.querySelector(queryStr);
+		if(activeObj && activeObj.nextSibling){
 			// 切换按钮
-			changeBtn(option,nextObj);
+			changeBtn(option,activeObj.nextSibling);
 		}else{
 			// 切换按钮
 			changeBtn(option, option.swipeList.parentNode.querySelectorAll('.'+option.btnClass)[0]);
