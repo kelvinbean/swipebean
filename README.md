@@ -8,38 +8,38 @@
 	4.而且可以控制轮播的方向（向左left,向右right,向上top,向下bottom）
 
 简单的配置项
-swipeOption ={
-		// 宽度
-		width:302,
-		// 高度
-		height:134,
-		// 包裹的父元素的query样式
-		list:'.swipe-list',
-		// 滑动方向
-		direction:'left',
-		// 间隔时间
-		iTime:2000,
-		// 滚动时间
-		duration:500,
-		// 悬停是否停止切换（false表示继续切换，true表示停止切换）
-		hoverStop:false,
-		// 是否需要按钮
-		hasBtn:false,
-		// 按钮类
-		btnClass:'bean_btn',
-		// 按钮父类class
-		btnListClass:'bean_btn_list',
-		// 选中类
-		activeClass:'active',
-		// 是否需要按钮数字
-		hasBtnFont: false
-	}
+swipeOption ={<br>
+		// 宽度<br>
+		width:302,<br>
+		// 高度<br>
+		height:134,<br>
+		// 包裹的父元素的query样式<br>
+		list:'.swipe-list',<br>
+		// 滑动方向<br>
+		direction:'left',<br>
+		// 间隔时间<br>
+		iTime:2000,<br>
+		// 滚动时间<br>
+		duration:500,<br>
+		// 悬停是否停止切换（false表示继续切换，true表示停止切换）<br>
+		hoverStop:false,<br>
+		// 是否需要按钮<br>
+		hasBtn:false,<br>
+		// 按钮类<br>
+		btnClass:'bean_btn',<br>
+		// 按钮父类class<br>
+		btnListClass:'bean_btn_list',<br>
+		// 选中类<br>
+		activeClass:'active',<br>
+		// 是否需要按钮数字<br>
+		hasBtnFont: false<br>
+	}<br>
 
-demo：
-    swipe.init({
-  		list:'.swipe-list',
-  		direction:'left',//默认是向左，可以不设置
-  		hoverStop : true,
-  		width:800,
-  		height:500
-  	});
+demo：<br>
+    swipe.init({<br>
+  		list:'.swipe-list',<br>
+  		direction:'left',//默认是向左，可以不设置<br>
+  		hoverStop : true,<br>
+  		width:800,<br>
+  		height:500<br>
+  	});<br>
