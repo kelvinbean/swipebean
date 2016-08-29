@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<style>
+	ul,li{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.swipe-list{
+		display: inline-block;
+	}
+	.bean_btn_list{
+		position: absolute;
+		bottom: 0;
+		left:50%;
+		transform:translateX(-50%);
+	}
+	.bean_btn{
+		display:inline-block;
+		padding: 10px;
+		background: #fff;
+		color:#000;
+		font-size: 14px;
+		cursor: pointer;
+		margin-right: 10px;
+		border-radius: 10px;
+	}
+	.bean_btn.active{
+		background-color: #ff6450;
+	}
+	</style>
+</head>
+<body>
+	<ul class="swipe-list">
+		<li class="swipe-item"><img src="1.jpg" alt=""></li>
+		<li class="swipe-item"><img src="2.jpg" alt=""></li>
+		<li class="swipe-item"><img src="3.jpg" alt=""></li>
+		<li class="swipe-item"><img src="4.jpg" alt=""></li>
+		<li class="swipe-item"><img src="5.jpg" alt=""></li>
+	</ul>
+	<ul class="swipe-list1">
+		<li class="swipe-item"><img src="1.jpg" alt=""></li>
+		<li class="swipe-item"><img src="2.jpg" alt=""></li>
+		<li class="swipe-item"><img src="3.jpg" alt=""></li>
+		<li class="swipe-item"><img src="4.jpg" alt=""></li>
+		<li class="swipe-item"><img src="5.jpg" alt=""></li>
+	</ul>
+	<ul class="swipe-list2">
+		<li class="swipe-item"><img src="1.jpg" alt=""></li>
+		<li class="swipe-item"><img src="2.jpg" alt=""></li>
+		<li class="swipe-item"><img src="3.jpg" alt=""></li>
+		<li class="swipe-item"><img src="4.jpg" alt=""></li>
+		<li class="swipe-item"><img src="5.jpg" alt=""></li>
+	</ul>
+	<ul class="swipe-list3">
+		<li class="swipe-item"><img src="1.jpg" alt=""></li>
+		<li class="swipe-item"><img src="2.jpg" alt=""></li>
+		<li class="swipe-item"><img src="3.jpg" alt=""></li>
+		<li class="swipe-item"><img src="4.jpg" alt=""></li>
+		<li class="swipe-item"><img src="5.jpg" alt=""></li>
+	</ul>
+	<script src="swipeBean.js"></script>
+<script>
+	var a = swipe.init({
+		list:'.swipe-list',
+		hoverStop : true,
+		width:800,
+		height:500
+	});
+
+	var b = swipe.init({
+		list:'.swipe-list1',
+		direction:'right',
+		hoverStop : true,
+		width:800,
+		height:500
+	});
+
+	swipe.init({
+		list : '.swipe-list2',
+		direction:'top',
+		width:800,
+		height:500
+	});
+
+	swipe.init({
+		list : '.swipe-list3',
+		direction:'bottom',
+		width:800,
+		height:500
+	});	
+</script>
+</body>
+</html>
