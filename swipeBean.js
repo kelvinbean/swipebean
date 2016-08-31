@@ -1,6 +1,6 @@
 
 /*
-	v 1.0.5
+	v 1.0.7
 
 	kelvinbean自制轮播插件
 
@@ -52,6 +52,8 @@
 		nextClass:'bean_next',
 		// 上一个按钮样式
 		prevClass:'bean_prev',
+		// 当在移动端时，是否需要touch事件
+		isTouch:true,
 		// 以下几项无需自定义设置
 		// 延迟执行方法对象
 		timeobj:null,
@@ -69,214 +71,150 @@
 		isPhone:false
 	},
 
-	// 执行滑动
-	doMove = function(option,page){
+	// 根据方向配置滑动
+	doMove = function(option){
 		switch (option.direction){
 			case 'left':
-				moveLeft(option,page);
+				option.bean = {
+					attrBean : 'left',//修改的属性/计算长度单位
+					initBean : '-'+option.width+'px',//初始为位置
+					pageBean :  function(page){//根据页码移动的公式
+						return Number(-option.width*page)+'px';
+					},
+					translateBean : function(judge){//手机滑屏时对应的操作
+						if(judge < 0){
+							return 'translateX(-'+option.width+'px)';
+						}else{
+							return 'translateX('+option.width+'px)';
+						}
+					},
+					touchBean : function(judge){//根据滑动方向判断对应的操作
+						if(judge < 0){
+							execMove(option,option.pageNum+1);
+						}else{
+							execMove(option,option.pageNum-1);
+						}
+					}
+				};
 				break;
 			case 'right':
-				moveRight(option,page);
+				option.bean = {
+					attrBean : 'left',					
+					initBean : '-'+option.widthAll+'px',
+					pageBean :  function(page){
+						return Number(-(option.widthAll-option.width*(page-1)))+'px';
+					},
+					translateBean : function(judge){
+						if(judge < 0){
+							return 'translateX(-'+option.width+'px)';
+						}else{
+							return 'translateX('+option.width+'px)';
+						}
+					},
+					touchBean : function(judge){
+						if(judge < 0){
+							execMove(option,option.pageNum-1);
+						}else{
+							execMove(option,option.pageNum+1);
+						}
+					}
+				};
 				break;
 			case 'top':
-				moveTop(option,page);
+				option.bean = {
+					attrBean : 'top',
+					initBean : '-'+option.height+'px',
+					pageBean :  function(page){
+						return Number(-option.height*page)+'px';
+					},
+					translateBean : function(judge){
+						if(judge < 0){
+							return 'translateY(-'+option.height+'px)';
+						}else{
+							return 'translateY('+option.height+'px)';
+						}
+					},
+					touchBean : function(judge){
+						if(judge < 0){
+							execMove(option,option.pageNum+1);
+						}else{
+							execMove(option,option.pageNum-1);
+						}
+					}
+				};
 				break;
 			case 'bottom':
-				moveBottom(option,page);
+				option.bean = {
+					attrBean : 'top',
+					initBean : '-'+option.heightAll+'px',
+					pageBean :  function(page){
+						return Number(-(option.heightAll-option.height*(page-1)))+'px';
+					},
+					translateBean : function(judge){
+						if(judge < 0){
+							return 'translateY(-'+option.height+'px)';
+						}else{
+							return 'translateY('+option.height+'px)';
+						}
+					},
+					touchBean : function(judge){
+						if(judge < 0){
+							execMove(option,option.pageNum-1);
+						}else{
+							execMove(option,option.pageNum+1);
+						}
+					}
+				};
 				break;
 		}
 	},
 
+	// 滑动操作
+	execMove = function(option,page,isAuto){
 
-	// 往左边滑动
-	moveLeft = function(option,page){
-
-		var _left;
+		var bean = option.bean;
 
 		clearTimeout(option.timeobj);
+		// 未定义页码，则代表还在当前页
+		if(typeof(page) == 'undefined'){
+			page = option.pageNum;
+		}
+		if(page == option.childNum+1 && !isAuto){
+			page = 1;
+		}else if(page == 0){
+			page = option.childNum;
+		}
+		// 如果是当前页就不执行滑动
+		if(page != option.pageNum){
+			// 执行滑动
+			option.swipeList.style[bean.attrBean] = bean.pageBean(page);
 
-		if(typeof(page)!="undefined" && page <= option.childNum+1 && page >= 0){
-			if(page == option.childNum+1){
-				page = 1;
-			}else if(page == 0){
-				page = option.childNum;
-			}
-			// option.swipeList.style.transition = (option.duration/1000) + 's left ease';
-			option.swipeList.style.left = Number(-option.width*page)+'px';
+		}
+		// 判断是否是自动滑动
+		if(page == option.childNum+1 && isAuto){
+			setTimeout(function(){
+				option.swipeList.style.transition = 'none';
+				option.swipeList.style[bean.attrBean] = bean.initBean;
+				option.pageNum = 1;
+				if(option.hasBtn){
+					changeBtn(option,option.pageNum);
+				}
+			},option.duration);
+		}else{
 			option.pageNum = page;
 			if(option.hasBtn){
 				changeBtn(option,page);
 			}
 		}
 
+		// 自动滚到下一页
 		option.timeobj = setTimeout(function(){
-			_left = option.swipeList.offsetLeft;
-
-			var move2Left = Number(_left-option.width);
-			option.swipeList.style.transition = (option.duration/1000) + 's left ease';
-			option.swipeList.style.left = move2Left+'px';
-			option.pageNum++;
-
-			// 自动切换按钮
-			if(option.hasBtn){
-				autoChange(option);
-			}
-
-			if(move2Left <= -option.widthAll-option.width){
-				option.pageNum = 1;
-				setTimeout(function(){
-					option.swipeList.style.transition = 'none';
-					option.swipeList.style.left = '-'+option.width+'px';
-				},option.duration);
-			}
-			moveLeft(option);
+			option.swipeList.style.transition = (option.duration/1000) + 's all ease';
+			execMove(option,option.pageNum+1,true);
 		},option.iTime);
 
 	},
 
-	// 往右边滑动
-	moveRight = function(option,page){
-
-		var _left;
-
-		clearTimeout(option.timeobj);
-
-		if(typeof(page)!="undefined" && page <= option.childNum+1 && page >= 0){
-			if(page == option.childNum+1){
-				page = 1;
-			}else if(page == 0){
-				page = option.childNum;
-			}
-			option.swipeList.style.left = Number(-(option.widthAll-option.width*(page-1)))+'px';
-			option.pageNum = page;
-			if(option.hasBtn){
-				changeBtn(option,page);
-			}
-		}
-		
-		option.timeobj = setTimeout(function(){
-
-			_left = option.swipeList.offsetLeft;
-
-			var move2Right = Number(_left+option.width);
-			option.swipeList.style.transition = (option.duration/1000) + 's left ease';
-			option.swipeList.style.left = move2Right+'px';
-			option.pageNum++;
-
-			// 自动切换按钮
-			if(option.hasBtn){
-				autoChange(option);
-			}
-
-			if(move2Right >= 0){
-				option.pageNum = 1;
-				setTimeout(function(){
-					option.swipeList.style.transition = 'none';
-					option.swipeList.style.left = -(option.widthAll)+'px';
-				},option.duration);
-			}
-
-			moveRight(option);
-		},option.iTime);
-
-	},
-
-	// 向上滑动
-	moveTop = function(option,page){
-
-		var _top;
-
-		clearTimeout(option.timeobj);
-
-		if(typeof(page)!="undefined" && page <= option.childNum+1 && page >= 0){
-			if(page == option.childNum+1){
-				page = 1;
-			}else if(page == 0){
-				page = option.childNum;
-			}
-			// option.swipeList.style.transition = (option.duration/1000) + 's top ease';
-			option.swipeList.style.top = Number(-option.height*page)+'px';
-			option.pageNum = page;
-			if(option.hasBtn){
-				changeBtn(option,page);
-			}
-		}
-		
-		option.timeobj = setTimeout(function(){
-
-			_top = option.swipeList.offsetTop;
-
-			var move2top = Number(_top-option.height);
-			option.swipeList.style.transition = (option.duration/1000) + 's top ease';
-			option.swipeList.style.top = move2top+'px';
-			option.pageNum++;
-
-			// 自动切换按钮
-			if(option.hasBtn){
-				autoChange(option);
-			}
-			
-
-			if(move2top <= -option.heightAll-option.height){
-				option.pageNum = 1;
-				setTimeout(function(){
-					option.swipeList.style.transition = 'none';
-					option.swipeList.style.top = '-'+option.height+'px';
-				},option.duration);
-			}
-			moveTop(option);
-		},option.iTime);
-
-	},
-
-	// 向下滑动
-	moveBottom = function(option,page){
-
-		var _top;
-
-		clearTimeout(option.timeobj);
-
-		if(typeof(page)!="undefined" && page <= option.childNum+1 && page >= 0){
-			if(page == option.childNum+1){
-				page = 1;
-			}else if(page == 0){
-				page = option.childNum;
-			}
-			// option.swipeList.style.transition = (option.duration/1000) + 's top ease';
-			option.swipeList.style.top = Number(-(option.heightAll-option.height*(page-1)))+'px';
-			option.pageNum = page;
-			if(option.hasBtn){
-				changeBtn(option,page);
-			}
-		}
-		
-		option.timeobj = setTimeout(function(){
-
-			_top = option.swipeList.offsetTop;
-
-			var move2bottom = Number(_top+option.height);
-			option.swipeList.style.transition = (option.duration/1000) + 's top ease';
-			option.swipeList.style.top = move2bottom+'px';
-			option.pageNum++;
-
-			// 自动切换按钮
-			if(option.hasBtn){
-				autoChange(option);
-			}
-			
-
-			if(move2bottom >= 0){
-				option.pageNum = 1;
-				setTimeout(function(){
-					option.swipeList.style.transition = 'none';
-					option.swipeList.style.top = -option.heightAll+'px';
-				},option.duration);
-			}
-			moveBottom(option);
-		},option.iTime);
-
-
-	},
 
 	// 自动切换按钮
 	autoChange = function(option){
@@ -391,7 +329,7 @@
 		}
 
 		// 复制第一个属性到最后
-		option.swipeList.appendChild(firstChild.cloneNode(true));console.log(children[childNum-1])
+		option.swipeList.appendChild(firstChild.cloneNode(true));
 		// 复制最后一个属性到前面
 		option.swipeList.insertBefore(lastChild.cloneNode(true),firstChild);
 
@@ -413,13 +351,15 @@
 			clearTimeout(option.timeobj);
 		};
 		option.swipeList.onmouseleave = function(){
-			doMove(option);
+			execMove(option);
 		};
 	},
 
 	// 绑定移动端滑动翻页事件
 	touchSwipe = function(option){
 		var startX,startY,nowX,nowY,x,y,initX,initY;
+
+		// 触屏操作
 		option.swipeList.ontouchstart = function(e){
 			clearTimeout(option.timeobj);
 			startX = e.targetTouches[0].pageX;
@@ -427,6 +367,8 @@
 			initX = option.swipeList.offsetLeft;
 			initY = option.swipeList.offsetTop;
 		};
+
+		// 滑屏操作
 		option.swipeList.ontouchmove = function(e){
 			nowX = e.targetTouches[0].pageX;
 			nowY = e.targetTouches[0].pageY;
@@ -444,79 +386,29 @@
 			}
 
 		};
+
+		// 手离开屏幕操作
 		option.swipeList.ontouchend = function(e){
-			if((option.direction == 'left' || option.direction == 'right')){
-				if(Math.abs(x) > 20){
-					if(x < 0){
-						option.swipeList.style.transition = (option.duration/2000) + 's all ease';
-						option.swipeList.style.transform = 'translateX(-'+option.width+'px)';
-						setTimeout(function(){
-							option.swipeList.style.transition ='none';
-							option.swipeList.style.transform = 'translateX(0)';
-							if(option.direction == 'left'){
-								doMove(option,option.pageNum+1);
-							}
-							if(option.direction == 'right'){
-								doMove(option,option.pageNum-1);
-							}
-
-						},200);
-					}else{
-						option.swipeList.style.transition = (option.duration/2000) + 's all ease';
-						option.swipeList.style.transform = 'translateX('+option.width+'px)';
-						setTimeout(function(){
-							option.swipeList.style.transition ='none';
-							option.swipeList.style.transform = 'translateX(0)';
-							if(option.direction == 'left'){
-								doMove(option,option.pageNum-1);
-							}
-							if(option.direction == 'right'){
-								doMove(option,option.pageNum+1);
-							}
-						},200);
-					}
-				}else{
-					e.preventDefault();
-					option.swipeList.style.transform = 'translateX(0)';
-					option.swipeList.style.left = initX+'px';
-					doMove(option);
-				}
+			if(option.direction == 'left' || option.direction == 'right'){
+				option.judge = x;
+				option.initVal = initX;
 			}else{
-				if(Math.abs(y) > 10){
-					if(y < 0){
-						option.swipeList.style.transition = (option.duration/2000) + 's all ease';
-						option.swipeList.style.transform = 'translateY(-'+option.height+'px)';
-						setTimeout(function(){
-							option.swipeList.style.transition ='none';
-							option.swipeList.style.transform = 'translateY(0)';
-							if(option.direction == 'top'){
-								doMove(option,option.pageNum+1);
-							}
-							if(option.direction == 'bottom'){
-								doMove(option,option.pageNum-1);
-							}
-
-						},200);
-					}else{
-						option.swipeList.style.transition = (option.duration/2000) + 's all ease';
-						option.swipeList.style.transform = 'translateY('+option.height+'px)';
-						setTimeout(function(){
-							option.swipeList.style.transition ='none';
-							option.swipeList.style.transform = 'translateY(0)';
-							if(option.direction == 'top'){
-								doMove(option,option.pageNum-1);
-							}
-							if(option.direction == 'bottom'){
-								doMove(option,option.pageNum+1);
-							}
-						},200);
-					}
-				}else{
-					e.preventDefault();
-					option.swipeList.style.transform = 'translateY(0)';
-					option.swipeList.style.top = initY+'px';
-					doMove(option);
-				}				
+				option.judge = y;
+				option.initVal = initY;
+			}
+			if(Math.abs(option.judge) > 10){
+				option.swipeList.style.transition = (option.duration/2000) + 's all ease';
+				option.swipeList.style.transform = option.bean.translateBean(option.judge);
+				setTimeout(function(){
+					option.swipeList.style.transition ='none';
+					option.swipeList.style.transform = 'translate(0,0)';
+					option.bean.touchBean(option.judge);
+				},option.duration/2);
+			}else{
+				e.preventDefault();
+				option.swipeList.style.transform = 'translate(0,0)';
+				option.swipeList.style[option.bean.attrBean] = option.initVal+'px';
+				execMove(option);
 			}
 		};
 	},
@@ -543,6 +435,7 @@
 		nodeList.className = option.btnListClass;
 		nodeList.appendChild(frag);
 		option.swipeList.parentNode.appendChild(nodeList);
+
 		// 绑定点击事件
 		nodeList.onclick = function(e){
 			var page;
@@ -550,7 +443,7 @@
 				page = e.target.getAttribute('page');
 				option.swipeList.style.transition = (option.duration/1000) + 's all ease';
 				changeBtn(option,e.target);
-				doMove(option,page);
+				execMove(option,Number(page));
 			}
 			e.stopPropagation();
 		};
@@ -562,12 +455,12 @@
 		if(type == 'prev'){
 			node.className = option.prevClass;
 			node.onclick = function(){
-				doMove(option,option.pageNum-1);
+				execMove(option,option.pageNum-1);
 			};
 		}else{
 			node.className = option.nextClass;
 			node.onclick = function(){
-				doMove(option,option.pageNum+1);
+				execMove(option,option.pageNum+1);
 			};
 		}
 		option.swipeList.parentNode.appendChild(node);
@@ -607,13 +500,16 @@
 			nextPrev(option,'prev');
 		}
 
+		// 配置滑动
+		doMove(option);
+
 		// 判断是否需要touch事件
-		if(option.isPhone){
+		if(option.isPhone && option.isTouch){
 			touchSwipe(option);
 		}
 
-		// 开始执行
-		doMove(option);
+		// 执行滑动
+		execMove(option,1,true);
 	};
 
 
@@ -643,11 +539,11 @@
 	};
 	// 下一页
 	swipe.next = function(option){
-		doMove(option,option.page+1);
+		execMove(option,option.page+1);
 	};
 	// 上一页
 	swipe.prev = function(option){
-		doMove(option,option.page-1);
+		execMove(option,option.page-1);
 	};
 
 	return swipe;
