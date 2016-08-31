@@ -44,12 +44,29 @@
 		activeClass:'active',
 		// 是否需要按钮数字
 		hasBtnFont: false,
+		// 是否需要下一个按钮
+		hasNext:false,
+		// 是否需要上一个按钮
+		hasPrev:false,
+		// 下一个按钮样式
+		nextClass:'bean_next',
+		// 上一个按钮样式
+		prevClass:'bean_prev',
 		// 以下几项无需自定义设置
+		// 延迟执行方法对象
 		timeobj:null,
+		// 切换对象的父对象
 		swipeList: null,
+		// 总宽度
 		widthAll : 0,
+		// 总高度
 		heightAll : 0,
-		childNum : 0
+		// 切换个数
+		childNum : 0,
+		// 当前页码
+		pageNum:1,
+		// 是否为移动端
+		isPhone:false
 	},
 
 	// 执行滑动
@@ -78,9 +95,18 @@
 
 		clearTimeout(option.timeobj);
 
-		if(page!="undefined"){
-			option.swipeList.style.transition = (option.duration/1000) + 's left ease';
-			option.swipeList.style.left = Number(-option.width*(page-1))+'px';
+		if(typeof(page)!="undefined" && page <= option.childNum+1 && page >= 0){
+			if(page == option.childNum+1){
+				page = 1;
+			}else if(page == 0){
+				page = option.childNum;
+			}
+			// option.swipeList.style.transition = (option.duration/1000) + 's left ease';
+			option.swipeList.style.left = Number(-option.width*page)+'px';
+			option.pageNum = page;
+			if(option.hasBtn){
+				changeBtn(option,page);
+			}
 		}
 
 		option.timeobj = setTimeout(function(){
@@ -89,16 +115,18 @@
 			var move2Left = Number(_left-option.width);
 			option.swipeList.style.transition = (option.duration/1000) + 's left ease';
 			option.swipeList.style.left = move2Left+'px';
+			option.pageNum++;
 
 			// 自动切换按钮
 			if(option.hasBtn){
 				autoChange(option);
 			}
 
-			if(move2Left <= -(option.widthAll-option.width)){
+			if(move2Left <= -option.widthAll-option.width){
+				option.pageNum = 1;
 				setTimeout(function(){
 					option.swipeList.style.transition = 'none';
-					option.swipeList.style.left = 0;
+					option.swipeList.style.left = '-'+option.width+'px';
 				},option.duration);
 			}
 			moveLeft(option);
@@ -113,9 +141,17 @@
 
 		clearTimeout(option.timeobj);
 
-		if(page!="undefined"){
-			option.swipeList.style.transition = (option.duration/1000) + 's left ease';
-			option.swipeList.style.left = Number(-(option.widthAll-option.width*page))+'px';
+		if(typeof(page)!="undefined" && page <= option.childNum+1 && page >= 0){
+			if(page == option.childNum+1){
+				page = 1;
+			}else if(page == 0){
+				page = option.childNum;
+			}
+			option.swipeList.style.left = Number(-(option.widthAll-option.width*(page-1)))+'px';
+			option.pageNum = page;
+			if(option.hasBtn){
+				changeBtn(option,page);
+			}
 		}
 		
 		option.timeobj = setTimeout(function(){
@@ -125,6 +161,7 @@
 			var move2Right = Number(_left+option.width);
 			option.swipeList.style.transition = (option.duration/1000) + 's left ease';
 			option.swipeList.style.left = move2Right+'px';
+			option.pageNum++;
 
 			// 自动切换按钮
 			if(option.hasBtn){
@@ -132,9 +169,10 @@
 			}
 
 			if(move2Right >= 0){
+				option.pageNum = 1;
 				setTimeout(function(){
 					option.swipeList.style.transition = 'none';
-					option.swipeList.style.left = -(option.widthAll-option.width)+'px';
+					option.swipeList.style.left = -(option.widthAll)+'px';
 				},option.duration);
 			}
 
@@ -150,9 +188,18 @@
 
 		clearTimeout(option.timeobj);
 
-		if(page!="undefined"){
-			option.swipeList.style.transition = (option.duration/1000) + 's top ease';
-			option.swipeList.style.top = Number(-option.height*(page-1))+'px';
+		if(typeof(page)!="undefined" && page <= option.childNum+1 && page >= 0){
+			if(page == option.childNum+1){
+				page = 1;
+			}else if(page == 0){
+				page = option.childNum;
+			}
+			// option.swipeList.style.transition = (option.duration/1000) + 's top ease';
+			option.swipeList.style.top = Number(-option.height*page)+'px';
+			option.pageNum = page;
+			if(option.hasBtn){
+				changeBtn(option,page);
+			}
 		}
 		
 		option.timeobj = setTimeout(function(){
@@ -162,6 +209,7 @@
 			var move2top = Number(_top-option.height);
 			option.swipeList.style.transition = (option.duration/1000) + 's top ease';
 			option.swipeList.style.top = move2top+'px';
+			option.pageNum++;
 
 			// 自动切换按钮
 			if(option.hasBtn){
@@ -169,10 +217,11 @@
 			}
 			
 
-			if(move2top <= -(option.heightAll-option.height)){
+			if(move2top <= -option.heightAll-option.height){
+				option.pageNum = 1;
 				setTimeout(function(){
 					option.swipeList.style.transition = 'none';
-					option.swipeList.style.top = 0;
+					option.swipeList.style.top = '-'+option.height+'px';
 				},option.duration);
 			}
 			moveTop(option);
@@ -187,9 +236,18 @@
 
 		clearTimeout(option.timeobj);
 
-		if(page!="undefined"){
-			option.swipeList.style.transition = (option.duration/1000) + 's top ease';
-			option.swipeList.style.top = Number(-(option.heightAll-option.height*page))+'px';
+		if(typeof(page)!="undefined" && page <= option.childNum+1 && page >= 0){
+			if(page == option.childNum+1){
+				page = 1;
+			}else if(page == 0){
+				page = option.childNum;
+			}
+			// option.swipeList.style.transition = (option.duration/1000) + 's top ease';
+			option.swipeList.style.top = Number(-(option.heightAll-option.height*(page-1)))+'px';
+			option.pageNum = page;
+			if(option.hasBtn){
+				changeBtn(option,page);
+			}
 		}
 		
 		option.timeobj = setTimeout(function(){
@@ -199,6 +257,7 @@
 			var move2bottom = Number(_top+option.height);
 			option.swipeList.style.transition = (option.duration/1000) + 's top ease';
 			option.swipeList.style.top = move2bottom+'px';
+			option.pageNum++;
 
 			// 自动切换按钮
 			if(option.hasBtn){
@@ -207,9 +266,10 @@
 			
 
 			if(move2bottom >= 0){
+				option.pageNum = 1;
 				setTimeout(function(){
 					option.swipeList.style.transition = 'none';
-					option.swipeList.style.top = -(option.heightAll-option.height)+'px';
+					option.swipeList.style.top = -option.heightAll+'px';
 				},option.duration);
 			}
 			moveBottom(option);
@@ -229,18 +289,32 @@
 		}else{
 			// 切换按钮
 			changeBtn(option, option.swipeList.parentNode.querySelectorAll('.'+option.btnClass)[0]);
-		};
+		}
 	},
 
 	// 切换按钮
 	changeBtn = function(option,target){
-		//删除当前选中类
-		var activeDom = option.swipeList.parentNode.querySelector('.'+option.activeClass);
-		if(activeDom){
-			activeDom.className = activeDom.className.replace(new RegExp('(^|\\b)' + option.activeClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+		if(typeof(target) == 'object'){
+			//删除当前选中类
+			var activeDom = option.swipeList.parentNode.querySelector('.'+option.activeClass);
+			if(activeDom){
+				activeDom.className = activeDom.className.replace(new RegExp('(^|\\b)' +option.activeClass.split(' ').join('|') + '(\\b|$)', 'gi'), '');
+			}
+			// 加上点击后的选中类
+			target.className += (' '+option.activeClass);
+
+		}else{
+			var btn_list = option.swipeList.parentNode.querySelectorAll('.'+option.btnClass);
+			for(var i in btn_list){
+				if(i < option.childNum){
+					if(btn_list[i].getAttribute('page') == target){
+						btn_list[i].className += (' '+option.activeClass);
+					}else{
+						btn_list[i].className = btn_list[i].className.replace(new RegExp('(^|\\b)'+option.activeClass.split(' ').join('|') + '(\\b|$)', 'gi'), '');
+					}
+				}
+			}
 		}
-		// 加上点击后的选中类
-		target.className += (' '+option.activeClass);
 	},
 	
 	// 设置容器元素样式
@@ -250,21 +324,21 @@
 		switch (option.direction){
 			case 'left':
 				option.swipeList.style.top = '0px';
-				option.swipeList.style.left = '0px';
-				option.swipeList.style.width = option.widthAll+'px';
+				option.swipeList.style.left = '-'+option.width+'px';
+				option.swipeList.style.width = option.widthAll+(option.width*2)+'px';
 				break;
 			case 'right':
 				option.swipeList.style.top = '0px';
-				option.swipeList.style.left = -(option.widthAll-option.width)+'px';
-				option.swipeList.style.width = option.widthAll+'px';
+				option.swipeList.style.left = -option.widthAll+'px';
+				option.swipeList.style.width = option.widthAll+(option.width*2)+'px';
 				break;
 			case 'top':
-				option.swipeList.style.top = '0px';
+				option.swipeList.style.top = '-'+option.height+'px';
 				option.swipeList.style.left = '0px';
 				option.swipeList.style.width = option.width+'px';
 				break;
 			case 'bottom':
-				option.swipeList.style.top = -(option.heightAll-option.height)+'px';
+				option.swipeList.style.top = -option.heightAll+'px';
 				option.swipeList.style.left = '0px';
 				option.swipeList.style.width = option.width+'px';
 				break;
@@ -292,12 +366,14 @@
 		option.swipeList.className = '';
 
 	},
+
 	// 计算宽高并设置子元素样式
 	caculate = function(option){
 		// 计算宽度
 		var children = option.swipeList.childNodes;
 		var childNum = 0;
 		var firstChild = null;
+		var lastChild = null;
 		var htmlArr = [];
 		for(var i=0;i<children.length;i++){
 			if(children[i].nodeType == 1){
@@ -309,17 +385,20 @@
 				children[i].style.float = option.direction=='right'?'right':'left';
 				children[i].style.width = option.width+'px';
 				children[i].style.height = option.height+'px';
+				lastChild = children[i];
 			}
 			htmlArr.push(children[i].outerHTML);
 		}
 
 		// 复制第一个属性到最后
-		option.swipeList.appendChild(firstChild.cloneNode(true));
+		option.swipeList.appendChild(firstChild.cloneNode(true));console.log(children[childNum-1])
+		// 复制最后一个属性到前面
+		option.swipeList.insertBefore(lastChild.cloneNode(true),firstChild);
 
 		// 计算总高度和总宽度
 		option.childNum = childNum;
-		option.widthAll = option.width * (childNum+1);
-		option.heightAll = option.height * (childNum+1);
+		option.widthAll = option.width * childNum;
+		option.heightAll = option.height * childNum;
 
 		// 加入处理向下滑时，倒序输出
 		if(option.direction == 'bottom'){
@@ -327,13 +406,118 @@
 			option.swipeList.innerHTML = htmlArr.reverse().join('');
 		}
 	},
+
 	// 绑定鼠标悬停停止滑动
 	pauseSwipe = function(option){
-		option.swipeList.onmouseenter = function(){
+		option.swipeList.onmousceenter = function(){
 			clearTimeout(option.timeobj);
 		};
 		option.swipeList.onmouseleave = function(){
 			doMove(option);
+		};
+	},
+
+	// 绑定移动端滑动翻页事件
+	touchSwipe = function(option){
+		var startX,startY,nowX,nowY,x,y,initX,initY;
+		option.swipeList.ontouchstart = function(e){
+			clearTimeout(option.timeobj);
+			startX = e.targetTouches[0].pageX;
+			startY = e.targetTouches[0].pageY;
+			initX = option.swipeList.offsetLeft;
+			initY = option.swipeList.offsetTop;
+		};
+		option.swipeList.ontouchmove = function(e){
+			nowX = e.targetTouches[0].pageX;
+			nowY = e.targetTouches[0].pageY;
+			x = nowX-startX;
+			y = nowY-startY;
+
+			if((option.direction == 'left' || option.direction == 'right') && Math.abs(x) < option.width){
+				e.preventDefault();
+				option.swipeList.style.transform = 'translateX('+x+'px)';
+			}
+
+			if((option.direction == 'top' || option.direction == 'bottom') && Math.abs(y) < option.height){
+				e.preventDefault();
+				option.swipeList.style.transform = 'translateY('+y+'px)';
+			}
+
+		};
+		option.swipeList.ontouchend = function(e){
+			if((option.direction == 'left' || option.direction == 'right')){
+				if(Math.abs(x) > 20){
+					if(x < 0){
+						option.swipeList.style.transition = (option.duration/2000) + 's all ease';
+						option.swipeList.style.transform = 'translateX(-'+option.width+'px)';
+						setTimeout(function(){
+							option.swipeList.style.transition ='none';
+							option.swipeList.style.transform = 'translateX(0)';
+							if(option.direction == 'left'){
+								doMove(option,option.pageNum+1);
+							}
+							if(option.direction == 'right'){
+								doMove(option,option.pageNum-1);
+							}
+
+						},200);
+					}else{
+						option.swipeList.style.transition = (option.duration/2000) + 's all ease';
+						option.swipeList.style.transform = 'translateX('+option.width+'px)';
+						setTimeout(function(){
+							option.swipeList.style.transition ='none';
+							option.swipeList.style.transform = 'translateX(0)';
+							if(option.direction == 'left'){
+								doMove(option,option.pageNum-1);
+							}
+							if(option.direction == 'right'){
+								doMove(option,option.pageNum+1);
+							}
+						},200);
+					}
+				}else{
+					e.preventDefault();
+					option.swipeList.style.transform = 'translateX(0)';
+					option.swipeList.style.left = initX+'px';
+					doMove(option);
+				}
+			}else{
+				if(Math.abs(y) > 10){
+					if(y < 0){
+						option.swipeList.style.transition = (option.duration/2000) + 's all ease';
+						option.swipeList.style.transform = 'translateY(-'+option.height+'px)';
+						setTimeout(function(){
+							option.swipeList.style.transition ='none';
+							option.swipeList.style.transform = 'translateY(0)';
+							if(option.direction == 'top'){
+								doMove(option,option.pageNum+1);
+							}
+							if(option.direction == 'bottom'){
+								doMove(option,option.pageNum-1);
+							}
+
+						},200);
+					}else{
+						option.swipeList.style.transition = (option.duration/2000) + 's all ease';
+						option.swipeList.style.transform = 'translateY('+option.height+'px)';
+						setTimeout(function(){
+							option.swipeList.style.transition ='none';
+							option.swipeList.style.transform = 'translateY(0)';
+							if(option.direction == 'top'){
+								doMove(option,option.pageNum-1);
+							}
+							if(option.direction == 'bottom'){
+								doMove(option,option.pageNum+1);
+							}
+						},200);
+					}
+				}else{
+					e.preventDefault();
+					option.swipeList.style.transform = 'translateY(0)';
+					option.swipeList.style.top = initY+'px';
+					doMove(option);
+				}				
+			}
 		};
 	},
 
@@ -364,11 +548,29 @@
 			var page;
 			if(e.target.nodeName.toLowerCase() == 'a'){
 				page = e.target.getAttribute('page');
+				option.swipeList.style.transition = (option.duration/1000) + 's all ease';
 				changeBtn(option,e.target);
 				doMove(option,page);
 			}
 			e.stopPropagation();
 		};
+	},
+
+	// 上下页按钮
+	nextPrev = function(option,type){
+		var node = document.createElement('a');
+		if(type == 'prev'){
+			node.className = option.prevClass;
+			node.onclick = function(){
+				doMove(option,option.pageNum-1);
+			};
+		}else{
+			node.className = option.nextClass;
+			node.onclick = function(){
+				doMove(option,option.pageNum+1);
+			};
+		}
+		option.swipeList.parentNode.appendChild(node);
 	},
 
 	// 处理函数
@@ -395,6 +597,21 @@
 			btnPrint(option);
 		}
 
+		// 判断是否要下一页切换按钮
+		if(option.hasNext){
+			nextPrev(option,'next');
+		}
+
+		// 判断是否需要上一页切换按钮
+		if(option.hasPrev){
+			nextPrev(option,'prev');
+		}
+
+		// 判断是否需要touch事件
+		if(option.isPhone){
+			touchSwipe(option);
+		}
+
 		// 开始执行
 		doMove(option);
 	};
@@ -414,9 +631,23 @@
 			_option[name] = options[name];
 		}
 
+		// 判断是否为移动端
+		var userAgent = navigator.userAgent;
+		if ( /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|micromessenger|ucbrowser/i.test( userAgent.toLowerCase())){
+			_option.isPhone = true;
+		}
+
 		// 处理函数
 		deal(_option);
 		
+	};
+	// 下一页
+	swipe.next = function(option){
+		doMove(option,option.page+1);
+	};
+	// 上一页
+	swipe.prev = function(option){
+		doMove(option,option.page-1);
 	};
 
 	return swipe;

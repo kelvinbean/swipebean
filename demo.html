@@ -33,6 +33,24 @@
 	.bean_btn.active{
 		background-color: #ff6450;
 	}
+	.bean_prev{
+		position: absolute;
+		left: 0;
+		top: 0;
+		display: block;
+		width: 100px;
+		height: 100px;
+		background-color: #fff;
+	}
+	.bean_next{
+		position: absolute;
+		top: 0;
+		right: 0;
+		display: block;
+		width: 100px;
+		height: 100px;
+		background-color: #000;
+	}
 	</style>
 </head>
 <body>
@@ -70,7 +88,10 @@
 		list:'.swipe-list',
 		hoverStop : true,
 		width:800,
-		height:500
+		height:500,
+		hasBtn:true,
+		hasPrev:true,
+		hasNext:true
 	});
 
 	var b = swipe.init({
@@ -78,21 +99,24 @@
 		direction:'right',
 		hoverStop : true,
 		width:800,
-		height:500
+		height:500,
+		hasBtn:true
 	});
 
 	swipe.init({
 		list : '.swipe-list2',
 		direction:'top',
 		width:800,
-		height:500
+		height:500,
+		hasBtn:true
 	});
 
 	swipe.init({
 		list : '.swipe-list3',
 		direction:'bottom',
 		width:800,
-		height:500
+		height:500,
+		hasBtn:true
 	});	
 </script>
 </body>
