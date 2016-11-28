@@ -54,74 +54,76 @@
 	</style>
 </head>
 <body>
-	<ul class="swipe-list">
-		<li class="swipe-item"><img src="1.jpg" alt=""></li>
-		<li class="swipe-item"><img src="2.jpg" alt=""></li>
-		<li class="swipe-item"><img src="3.jpg" alt=""></li>
-		<li class="swipe-item"><img src="4.jpg" alt=""></li>
-		<li class="swipe-item"><img src="5.jpg" alt=""></li>
-	</ul>
-	<ul class="swipe-list1">
-		<li class="swipe-item"><img src="1.jpg" alt=""></li>
-		<li class="swipe-item"><img src="2.jpg" alt=""></li>
-		<li class="swipe-item"><img src="3.jpg" alt=""></li>
-		<li class="swipe-item"><img src="4.jpg" alt=""></li>
-		<li class="swipe-item"><img src="5.jpg" alt=""></li>
-	</ul>
-	<ul class="swipe-list2">
-		<li class="swipe-item"><img src="1.jpg" alt=""></li>
-		<li class="swipe-item"><img src="2.jpg" alt=""></li>
-		<li class="swipe-item"><img src="3.jpg" alt=""></li>
-		<li class="swipe-item"><img src="4.jpg" alt=""></li>
-		<li class="swipe-item"><img src="5.jpg" alt=""></li>
-	</ul>
-	<ul class="swipe-list3">
-		<li class="swipe-item"><img src="1.jpg" alt=""></li>
-		<li class="swipe-item"><img src="2.jpg" alt=""></li>
-		<li class="swipe-item"><img src="3.jpg" alt=""></li>
-		<li class="swipe-item"><img src="4.jpg" alt=""></li>
-		<li class="swipe-item"><img src="5.jpg" alt=""></li>
-	</ul>
+	<div>
+		<ul class="swipe-list">
+			<li class="swipe-item"><img src="1.jpg" alt=""></li>
+			<li class="swipe-item"><img src="2.jpg" alt=""></li>
+			<li class="swipe-item"><img src="3.jpg" alt=""></li>
+			<li class="swipe-item"><img src="4.jpg" alt=""></li>
+			<li class="swipe-item"><img src="5.jpg" alt=""></li>
+		</ul>
+		<ul class="swipe-list1">
+			<li class="swipe-item"><img src="1.jpg" alt=""></li>
+			<li class="swipe-item"><img src="2.jpg" alt=""></li>
+			<li class="swipe-item"><img src="3.jpg" alt=""></li>
+			<li class="swipe-item"><img src="4.jpg" alt=""></li>
+			<li class="swipe-item"><img src="5.jpg" alt=""></li>
+		</ul>
+		<ul class="swipe-list2">
+			<li class="swipe-item"><img src="1.jpg" alt=""></li>
+			<li class="swipe-item"><img src="2.jpg" alt=""></li>
+			<li class="swipe-item"><img src="3.jpg" alt=""></li>
+			<li class="swipe-item"><img src="4.jpg" alt=""></li>
+			<li class="swipe-item"><img src="5.jpg" alt=""></li>
+		</ul>
+		<ul class="swipe-list3">
+			<li class="swipe-item"><img src="1.jpg" alt=""></li>
+			<li class="swipe-item"><img src="2.jpg" alt=""></li>
+			<li class="swipe-item"><img src="3.jpg" alt=""></li>
+			<li class="swipe-item"><img src="4.jpg" alt=""></li>
+			<li class="swipe-item"><img src="5.jpg" alt=""></li>
+		</ul>
+	</div>
 	<script src="swipeBean.js"></script>
-<script>
-	var a = swipe.init({
-		list:'.swipe-list',
-		itemClass:'swipe-item',
-		hoverStop : true,
-		width:800,
-		height:500,
-		hasBtn:true,
-		hasPrev:true,
-		hasNext:true
-	});
+	<script>
+		var a = swipe.init({
+			list:'.swipe-list',
+			itemClass:'swipe-item',
+			hoverStop : true,
+			width:800,
+			height:500,
+			hasBtn:true,
+			hasPrev:true,
+			hasNext:true
+		});
 
-	var b = swipe.init({
-		list:'.swipe-list1',
-		itemClass:'swipe-item',
-		direction:'right',
-		hoverStop : true,
-		width:800,
-		height:500,
-		hasBtn:true
-	});
+		var b = swipe.init({
+			list:'.swipe-list1',
+			itemClass:'swipe-item',
+			direction:'right',
+			hoverStop : true,
+			width:800,
+			height:500,
+			hasBtn:true
+		});
 
-	swipe.init({
-		list : '.swipe-list2',
-		itemClass:'swipe-item',
-		direction:'top',
-		width:800,
-		height:500,
-		hasBtn:true
-	});
+		swipe.init({
+			list : '.swipe-list2',
+			itemClass:'swipe-item',
+			direction:'top',
+			width:800,
+			height:500,
+			hasBtn:true
+		});
 
-	swipe.init({
-		list : '.swipe-list3',
-		itemClass:'swipe-item',
-		direction:'bottom',
-		width:800,
-		height:500,
-		hasBtn:true
-	});	
-</script>
+		swipe.init({
+			list : '.swipe-list3',
+			itemClass:'swipe-item',
+			direction:'bottom',
+			width:800,
+			height:500,
+			hasBtn:true
+		});	
+	</script>
 </body>
 </html>
