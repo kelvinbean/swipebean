@@ -8,7 +8,7 @@
 4.而且可以控制轮播的方向（向左left,向右right,向上top,向下bottom）<br/>
 
 ## 简单的配置项<br/>
-<pre>
+```javascript
 	swipeOption ={
 		// 宽度
 		width:302,
@@ -57,10 +57,10 @@
 		// 复制数量（一对为单位、一前一后）
 		copyNum:1
 	}
-</pre>
+```
 
 ## demo：
-<pre>
+```javascript
     swipe.init(
   		list:'.swipe-list',
   		itemClass:'swipe-item',
@@ -69,4 +69,4 @@
   		width:800,
   		height:500
   	});
-</pre>
+```
