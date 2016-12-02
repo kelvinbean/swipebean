@@ -1,6 +1,6 @@
 
 /*
-	v 1.4
+	v 1.5
 
 	kelvinbean自制轮播插件
 
@@ -64,7 +64,7 @@
 		isTouch:true,
 		// 回调函数（在图片切换的同时进行）
 		callback:null,
-		// 复制数量（一对为单位、一前一后）
+		// 复制数量（一对为单位、一前一后），只支持向左和向上方向
 		copyNum:1,
 		// 以下几项无需自定义设置
 		// 延迟执行方法对象
@@ -135,9 +135,9 @@
 			case 'top':
 				option.bean = {
 					attrBean : 'top',
-					initBean : '-'+option.height+'px',
+					initBean : '-'+(option.height*option.copyNum)+'px',
 					pageBean :  function(page){
-						return Number(-option.height*page)+'px';
+						return Number(-option.height*(page+option.copyNum-1))+'px';
 					},
 					translateBean : function(judge){
 						if(judge < 0){
@@ -182,7 +182,7 @@
 	},
 
 	// 滑动操作
-	execMove = function(option,page,isAuto){
+	execMove = function(option,page){
 
 		var bean = option.bean;
 
@@ -302,7 +302,7 @@
 		for(var i=0;i<activeObj.length;i++){
 			activeObj[i].className = activeObj[i].className.replace(new RegExp('(^|\\b)\\s*'+'active'.split(' ').join('|') + '(\\b|$)', 'gi'), '');
 		}
-		
+
 		// 至少有两项才做这个active切换
 		if(option.childNum >= 2){
 			if(page > option.childNum){
