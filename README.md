@@ -77,3 +77,4 @@
   		height:500
   	});
 ```
+[演示地址](https://kelvinbean.github.io/swipebean/demo/demo)
