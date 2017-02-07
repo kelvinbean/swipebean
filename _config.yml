@@ -1,0 +1,8 @@
+title: Swipebean
+description: 一个简易的轮播插件
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
